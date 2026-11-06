@@ -1,0 +1,95 @@
+/* Importamos las fuentes de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@500;700&display=swap');
+
+/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN GLOBAL
+   ========================================= */
+:root {
+    --color-madera: #8B5E3C;
+    --color-madera-oscuro: #6B472B;
+    --color-beige: #F5F5DC;
+    --color-fondo: #FAFAFA;
+    --color-oliva: #6B8E23;
+    --color-oliva-oscuro: #55721C;
+    --color-texto: #333333;
+    --color-texto-claro: #666666;
+    --fuente-titulos: 'Poppins', system-ui, sans-serif;
+    --fuente-textos: 'Inter', system-ui, sans-serif;
+    --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --sombra-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+    --borde-radio: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--fuente-textos); background-color: var(--color-fondo); color: var(--color-texto); line-height: 1.6; }
+h1, h2, h3 { font-family: var(--fuente-titulos); color: var(--color-madera); margin-bottom: 1rem; }
+header { background-color: var(--color-beige); padding: 1rem; text-align: center; box-shadow: var(--sombra-suave); position: sticky; top: 0; z-index: 100; }
+nav { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+button { font-family: var(--fuente-textos); font-weight: 600; padding: 0.6rem 1.2rem; border: none; border-radius: var(--borde-radio); cursor: pointer; transition: all 0.3s ease; background-color: var(--color-madera); color: white; }
+button:hover { background-color: var(--color-madera-oscuro); transform: translateY(-2px); box-shadow: var(--sombra-hover); }
+.btn-comprar, button[type="submit"] { background-color: var(--color-oliva); }
+.btn-comprar:hover, button[type="submit"]:hover { background-color: var(--color-oliva-oscuro); }
+main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+.tarjeta { background-color: white; border-radius: var(--borde-radio); padding: 1.5rem; box-shadow: var(--sombra-suave); margin-bottom: 1.5rem; }
+.grilla { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+.tarjeta-producto { background-color: white; border-radius: var(--borde-radio); box-shadow: var(--sombra-suave); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+.tarjeta-producto:hover { transform: translateY(-5px); box-shadow: var(--sombra-hover); }
+.tarjeta-producto img { width: 100%; height: 200px; object-fit: cover; }
+.info-producto { padding: 1rem; display: flex; flex-direction: column; flex-grow: 1; }
+.precio-destacado { font-size: 1.25rem; font-weight: 700; color: var(--color-oliva); margin: 0.5rem 0; }
+form, #barra-filtros { background-color: white; border-radius: var(--borde-radio); padding: 1.5rem; box-shadow: var(--sombra-suave); display: flex; flex-direction: column; gap: 1rem; }
+input, select { font-family: var(--fuente-textos); padding: 0.8rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+input:focus, select:focus { outline: none; border-color: var(--color-madera); box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.2); }
+
+@media (min-width: 768px) {
+    .grilla { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    #barra-filtros { flex-direction: row; align-items: center; }
+}
+
+@media print {
+    header, nav, button, #seccion-catalogo, #seccion-carrito, #seccion-administracion, #formulario-presupuesto { display: none !important; }
+    #seccion-presupuesto, #area-presupuesto { display: block !important; }
+    body, .tarjeta, main { background-color: white !important; box-shadow: none !important; margin: 0; padding: 0; }
+    #area-presupuesto { border: 2px solid var(--color-texto); padding: 2rem; border-radius: 0; }
+}
+
+.mensaje-error { color: red; font-size: 0.85rem; display: none; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+#tabla-productos th, #tabla-productos td { padding: 0.5rem; border: 1px solid #ccc; }
+.miniatura-tabla { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+
+/* =========================================
+   9. MODIFICACIONES PWA Y MOBILE
+   ========================================= */
+button, input, select {
+    min-height: 44px; /* Altura táctil para celulares */
+}
+
+@media (max-width: 767px) {
+    /* Catálogo en 2 columnas */
+    .grilla {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 0.5rem;
+    }
+    .tarjeta-producto img {
+        height: 120px;
+    }
+    .precio-destacado {
+        font-size: 1rem;
+    }
+
+    /* Carrito que sube desde abajo */
+    #seccion-carrito {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        z-index: 1000;
+        padding: 1rem;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+        max-height: 60vh;
+        overflow-y: auto;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+}

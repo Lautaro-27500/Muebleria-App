@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mueblería Roble</title>
+    <!-- Vinculamos la hoja de estilos y los ajustes PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8B5E3C">
+    <link rel="apple-touch-icon" href="icono-192.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Mueblería Roble</h1>
+        <nav>
+            <button id="btn-menu-catalogo">Catálogo</button>
+            <button id="btn-menu-carrito">
+                Carrito (<span id="contador-carrito">0</span>)
+            </button>
+            <button id="btn-menu-presupuestos">Presupuestos</button>
+            <button id="btn-menu-administracion">Administración</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="seccion-catalogo">
+            <h2>Catálogo de Muebles</h2>
+            <div id="barra-filtros">
+                <input type="text" id="filtro-busqueda" placeholder="Buscar por nombre...">
+                <select id="filtro-categoria">
+                    <option value="">Todas las categorías</option>
+                    <option value="mesas">Mesas</option>
+                    <option value="sillas">Sillas</option>
+                    <option value="sillones">Sillones</option>
+                    <option value="camas">Camas</option>
+                </select>
+                
+                <label for="filtro-precio-max">Precio Máx: $</label>
+                <!-- Modificación PWA: inputmode="decimal" -->
+                <input type="number" id="filtro-precio-max" placeholder="Ej: 150000" inputmode="decimal">
+                <label for="filtro-orden">Ordenar:</label>
+                <select id="filtro-orden">
+                    <option value="relevancia">Relevancia</option>
+                    <option value="menor-mayor">Menor a mayor precio</option>
+                    <option value="mayor-menor">Mayor a menor precio</option>
+                </select>
+            </div>
+            <div id="grilla-productos" class="grilla"></div>
+        </section>
+
+        <section id="seccion-carrito" style="display: none;">
+            <h2>Tu Carrito</h2>
+            <div id="panel-carrito"></div>
+            <div id="total-carrito">
+                <p>Total: $<span id="monto-total">0</span></p>
+                <button id="btn-vaciar-carrito">Vaciar Carrito</button>
+            </div>
+        </section>
+
+        <section id="seccion-presupuesto" style="display: none;">
+            <h2>Generar Presupuesto</h2>
+            <form id="formulario-presupuesto">
+                <label for="presupuesto-cliente">Cliente:</label>
+                <input type="text" id="presupuesto-cliente" required>
+
+                <label for="presupuesto-descuento">Descuento (%):</label>
+                <!-- Modificación PWA: inputmode="decimal" -->
+                <input type="number" id="presupuesto-descuento" min="0" max="100" value="0" inputmode="decimal">
+
+                <label for="presupuesto-validez">Validez (días):</label>
+                <!-- Modificación PWA: inputmode="decimal" -->
+                <input type="number" id="presupuesto-validez" min="1" required inputmode="decimal">
+
+                <button type="submit">Generar PDF / Vista Previa</button>
+            </form>
+            <div id="area-presupuesto"></div>
+        </section>
+
+        <section id="seccion-administracion" style="display: none;">
+            <h2>Administración de Productos</h2>
+            <form id="formulario-producto">
+                <label for="prod-codigo">Código SKU (Ej: MES-01):</label>
+                <input type="text" id="prod-codigo">
+                <span id="error-codigo" class="mensaje-error"></span>
+
+                <label for="prod-nombre">Nombre del mueble:</label>
+                <input type="text" id="prod-nombre">
+                <span id="error-nombre" class="mensaje-error"></span>
+
+                <label for="prod-categoria">Categoría:</label>
+                <input type="text" id="prod-categoria">
+                <span id="error-categoria" class="mensaje-error"></span>
+
+                <label for="prod-material">Material principal:</label>
+                <input type="text" id="prod-material">
+                <span id="error-material" class="mensaje-error"></span>
+
+                <label for="prod-medidas">Medidas (ej. 120x80x75cm):</label>
+                <input type="text" id="prod-medidas">
+                <span id="error-medidas" class="mensaje-error"></span>
+
+                <label for="prod-precio">Precio de Venta ($):</label>
+                <!-- Modificación PWA: inputmode="decimal" -->
+                <input type="number" id="prod-precio" inputmode="decimal">
+                <span id="error-precio" class="mensaje-error"></span>
+
+                <label for="prod-imagen">Ruta de la imagen (.jpg, .png o .webp):</label>
+                <input type="text" id="prod-imagen" placeholder="ej: img/silla.jpg">
+                <span id="error-imagen" class="mensaje-error"></span>
+
+                <button type="submit" id="btn-guardar-producto">Guardar Producto</button>
+                <button type="button" id="btn-cancelar-edicion" style="display: none;">Cancelar Edición</button>
+            </form>
+
+            <h3>Listado de Productos</h3>
+            <div style="overflow-x: auto;">
+                <table id="tabla-productos" border="1" style="width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: left;">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-tabla-productos"></tbody>
+                </table>
+            </div>
+
+            <div id="gestion-datos" style="margin-top: 2rem;">
+                <h3>Respaldo de Datos</h3>
+                <button id="btn-exportar">Exportar Datos a JSON</button>
+                <br><br>
+                <label for="input-importar">Importar Datos:</label>
+                <input type="file" id="input-importar" accept=".json">
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
